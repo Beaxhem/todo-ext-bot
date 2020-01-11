@@ -1,10 +1,16 @@
+import os
+
 from telegram.ext import Updater, ConversationHandler, CommandHandler, MessageHandler, Filters
 from handlers import start, add, add_confirm, add_task, delete, delete_id, delete_confirm, error, finish, show
 from handlers_index import *
 
+TOKEN = os.environ.get("TOKEN")
+PORT = os.environ.get("PORT", "8443")
+
 
 def main():
-    updater = Updater("1054752929:AAG_59xMJSgocgN7_93LYGe4yWhrr_jqSsc", use_context=True)
+
+    updater = Updater(TOKEN, use_context=True)
 
     dp = updater.dispatcher
 
@@ -36,7 +42,10 @@ def main():
     dp.add_handler(handler)
     dp.add_error_handler(error)
 
-    updater.start_polling()
+    updater.start_webhook(listen="0.0.0.0",
+                          port=PORT,
+                          url_path=TOKEN)
+    updater.bot.set_webhook("https://todo-ext-bot.herokuapp.com/" + TOKEN)
 
     updater.idle()
 
