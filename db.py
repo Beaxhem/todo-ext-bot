@@ -1,3 +1,5 @@
+import os
+
 from sqlalchemy import Column, Integer, ForeignKey, String, create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import relationship, sessionmaker
@@ -37,5 +39,5 @@ class Task(Base):
         return "%s" % self.text
 
 
-engine = create_engine("postgres://ilya:b1a0EPy8@localhost", echo=False)
+engine = create_engine(os.environ.get("DATABASE_URL"), echo=False)
 Session = sessionmaker(bind=engine)
